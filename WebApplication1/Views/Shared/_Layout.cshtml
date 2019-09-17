@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap-4.0.0/dist/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar-nav navbar-expand-lg bg-dark navbar-dark">
+            <a class="navbar-brand ml-1" asp-controller="Home" asp-action="Index">
+                <img src="~/2.jpg" width="30" height="30" alt="Alternate Text" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="collapsibleNavbar" class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">学生列表</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Creat">添加学生</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        @RenderBody()
+    </div>
+
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", required: false)
+    }
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap-4.0.0/dist/js/bootstrap.js"></script>
+</body>
+</html>

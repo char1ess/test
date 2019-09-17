@@ -1,0 +1,43 @@
+﻿@*@using WebApplication1.Models*@
+@model IEnumerable<Student>
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewBag.Title = "AAAIndex";
+}
+
+@*<table>
+        <tr>
+            <td>ID</td>
+            <td>姓名</td>
+            <td>学号</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Number</td>
+            </tr>
+        }
+    </table>*@
+
+<div class="card-deck">
+    @foreach (var item in Model)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                <h3>@item.Name</h3>
+            </div>
+            <img src="~/3.jpg" class="card-img-top" />
+            <div class="card-footer text-center">
+                <a asp-controller="home" asp-action="details" asp-route-id="@item.Id" class="btn btn-primary">查看</a>
+                <a href="#" class="btn btn-primary">编辑</a>
+                <a href="#" class="btn btn-danger">删除</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    @*<script src="~/Js/CustomScript.js"></script>*@
+}
