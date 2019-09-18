@@ -45,10 +45,14 @@ namespace WebApplication1.Controllers
             return View();
         }
         [HttpPost]
-        public RedirectToActionResult Creat(Student student)
+        public IActionResult Creat(Student student)
         {
-            Student newstudent = _studentRepository.Add(student);
-            return RedirectToAction("Details", new { id = newstudent.Id });
+            if (ModelState.IsValid)
+            {
+                Student newstudent = _studentRepository.Add(student);
+                return RedirectToAction("Details", new { id = newstudent.Id });
+            }
+            return View();
         }
     }
 }
