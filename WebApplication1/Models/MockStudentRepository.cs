@@ -26,6 +26,16 @@ namespace WebApplication1.Models
             return student;
         }
 
+        public Student Delete(int id)
+        {
+            Student student = _student.FirstOrDefault(a => a.Id == id);
+            if (student != null)
+            {
+                _student.Remove(student);
+            }
+            return student;
+        }
+
         public IEnumerable<Student> GetAllStudent()
         {
             return _student;
@@ -34,6 +44,17 @@ namespace WebApplication1.Models
         public Student GetStudent(int id)
         {
             return _student.FirstOrDefault(a => a.Id == id);
+        }
+
+        public Student Update(Student updatestudent)
+        {
+            Student student = _student.FirstOrDefault(a => a.Id == updatestudent.Id);
+            if (student != null)
+            {
+                student.Name = updatestudent.Name;
+                student.Number = updatestudent.Number;
+            }
+            return student;
         }
     }
 }

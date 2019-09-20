@@ -9,7 +9,8 @@ namespace WebApplication1.Models
     {
         Student GetStudent(int id);
         IEnumerable< Student> GetAllStudent();
-
         Student Add(Student student);
+        Student Update(Student updatestudent);
+        Student Delete(int id);
     }
 }
