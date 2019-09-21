@@ -25,9 +25,9 @@ namespace WebApplication1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<AppDbContext>(options=>options.UseSqlServer(_configuration.GetConnectionString("StudentDBConnection")));
+            services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("StudentDBConnection")));
             services.AddMvc();
-            services.AddSingleton <IStudentRepository,MockStudentRepository> ();
+            services.AddScoped<IStudentRepository, SQLStudentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +43,7 @@ namespace WebApplication1
             //app.Use(async (context, next) => {context.Response.ContentType = "text/plain;charset=utf-8"; await context.Response.WriteAsync(processname); next(); });
             //app.Run(async (context) =>
             //{
-                
+
             //    await context.Response.WriteAsync("Hello World!第二个中间件");
             //});
         }
