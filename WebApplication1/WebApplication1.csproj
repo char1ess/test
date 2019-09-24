@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Css\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\lib\bootstrap-4.0.0\.github\CONTRIBUTING.md" />
     <None Include="wwwroot\lib\bootstrap-4.0.0\.github\ISSUE_TEMPLATE.md" />
   </ItemGroup>

@@ -39,6 +39,7 @@ namespace WebApplication1
             }
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
+            //app.UseMvc(config=>config.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
             //var processname = Process.GetCurrentProcess().ProcessName;
             //app.Use(async (context, next) => {context.Response.ContentType = "text/plain;charset=utf-8"; await context.Response.WriteAsync(processname); next(); });
             //app.Run(async (context) =>

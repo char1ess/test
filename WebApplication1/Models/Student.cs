@@ -14,5 +14,6 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         [Required(ErrorMessage = "请选择编号"), Display(Name= "编号")]
         public NumberEnum? Number { get; set; }
+        public string PhotoPath { get; set; }
     }
 }

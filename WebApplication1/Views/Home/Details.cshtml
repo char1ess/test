@@ -3,6 +3,7 @@
 @{
     //Layout = "~/Views/Shared/_Layout.cshtml";
     //ViewBag.Title = "AAADetials";
+    var photoPath = "~/images/" + (Model.Student.PhotoPath ?? "3.jpg");
 }
 
 @*@{ var student = ViewData["Student"] as Student;}
@@ -32,7 +33,7 @@
                 <h3>@Model.Student.Name</h3>
             </div>
             <div class="card-body text-center">
-                <img src="~/3.jpg" class="card-img-top" />
+                <img src="@photoPath" class="card-img-top" asp-append-version="true"/>
                 <h4>ID:@Model.Student.Id</h4>
                 <h4>Name:@Model.Student.Name</h4>
                 <h4>Number:@Model.Student.Number</h4>
