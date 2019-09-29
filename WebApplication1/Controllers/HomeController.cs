@@ -55,20 +55,21 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
-                if (model.Photos != null || model.Photos.Count > 0)
-                {
-                    //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
-                    //uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;//特殊唯一文件名
-                    //string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
-                    //model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));//复制图片到指定目录
-                    foreach (var Photo in model.Photos)
-                    {
-                        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
-                        uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;//特殊唯一文件名
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
-                        Photo.CopyTo(new FileStream(filePath, FileMode.Create));//复制图片到指定目录
-                    }
-                }
+                //if (model.Photos != null || model.Photos.Count > 0)
+                //{
+                //    //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
+                //    //uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;//特殊唯一文件名
+                //    //string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
+                //    //model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));//复制图片到指定目录
+                //    foreach (var Photo in model.Photos)
+                //    {
+                //        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
+                //        uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;//特殊唯一文件名
+                //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
+                //        Photo.CopyTo(new FileStream(filePath, FileMode.Create));//复制图片到指定目录
+                //    }
+                //}
+                uniqueFileName = ProcessUploadedFile(model);
                 Student newstudent = new Student { Id = model.Id, Name = model.Name, Number = model.Number, PhotoPath = uniqueFileName };
                 _studentRepository.Add(newstudent);
                 return RedirectToAction("Details", new { id = newstudent.Id });
@@ -76,6 +77,73 @@ namespace WebApplication1.Controllers
                 //return RedirectToAction("Details", new { id = newstudent.Id });
             }
             return View();
+        }
+
+        [HttpGet]
+        public ViewResult Edit(int id)
+        {
+            Student student = _studentRepository.GetStudent(id);
+            StudentEditViewModel studentEditViewModel = new StudentEditViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Number = student.Number,
+                ExistingPhotoPath = student.PhotoPath
+            };
+            return View(studentEditViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(StudentEditViewModel model)
+        {
+            //满足模型验证
+            if (ModelState.IsValid)
+            {
+                Student student = _studentRepository.GetStudent(model.Id);
+                student.Id = model.Id;
+                student.Name = model.Name;
+                student.Number = model.Number;
+                if (model.Photos.Count > 0)
+                {
+                    if (model.ExistingPhotoPath != null)//存在图片路径则删除就图片
+                    {
+                        string filename = Path.Combine(hostingEnvironment.WebRootPath, "images", model.ExistingPhotoPath);
+                        System.IO.File.Delete(filename);
+                    }
+                }
+                student.PhotoPath = ProcessUploadedFile(model);
+                Student updateStudent = _studentRepository.Update(student);
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        /// <summary>
+        /// 拼接图片存放路径，复制图片到指定路径
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private string ProcessUploadedFile(StudentCreatViewModel model)
+        {
+            string uniqueFileName = null;
+            if (model.Photos != null || model.Photos.Count > 0)
+            {
+                //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
+                //uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;//特殊唯一文件名
+                //string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
+                //model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));//复制图片到指定目录
+                foreach (var Photo in model.Photos)
+                {
+                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");//wwwroot下的images
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;//特殊唯一文件名
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);//拼接出文件目录文件名
+                    using (var copyFilePath = new FileStream(filePath, FileMode.Create))
+                    {
+                        Photo.CopyTo(copyFilePath);//复制图片到指定目录
+                    }
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
