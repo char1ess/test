@@ -37,6 +37,11 @@ namespace WebApplication1
             {
                 app.UseDeveloperExceptionPage();
             }
+            else//非开发环境异常界面
+            {
+                //app.UseStatusCodePagesWithRedirects("/Error/{0}");//将地址修改为/Error/404，错误码改为302
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");//保留源地址，错误码一直为404
+            }
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
             //app.UseMvc(config=>config.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));

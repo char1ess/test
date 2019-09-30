@@ -27,9 +27,14 @@ namespace WebApplication1.Controllers
             ViewBag.Title = "AAAIndex";
             return View(student);
         }
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            Student student = _studentRepository.GetStudent(id ?? 1);
+            Student student = _studentRepository.GetStudent(id);
+            if (student == null)
+            {
+                Response.StatusCode = 404;
+                return View("StudentNotFound", id);
+            }
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
                 Student = student,
@@ -83,6 +88,11 @@ namespace WebApplication1.Controllers
         public ViewResult Edit(int id)
         {
             Student student = _studentRepository.GetStudent(id);
+            if (student == null)
+            {
+                Response.StatusCode = 404;
+                return View("StudentNotFound", id);
+            }
             StudentEditViewModel studentEditViewModel = new StudentEditViewModel
             {
                 Id = student.Id,
