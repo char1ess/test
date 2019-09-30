@@ -39,6 +39,8 @@ namespace WebApplication1
             }
             else//非开发环境异常界面
             {
+                app.UseExceptionHandler("/Error");//拦截内部异常
+                //拦截404未找到异常
                 //app.UseStatusCodePagesWithRedirects("/Error/{0}");//将地址修改为/Error/404，错误码改为302
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");//保留源地址，错误码一直为404
             }

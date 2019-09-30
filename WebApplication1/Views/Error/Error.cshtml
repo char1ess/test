@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "异常错误页面";
+}
+<h3>发生内部异常信息，请与我们联系！</h3>
+<div class="alert alert-danger">
+    <h5>异常路径：</h5>
+    <hr />
+    <p>@ViewBag.ExceptionPath</p>
+</div>
+<div class="alert alert-danger">
+    <h5>异常信息：</h5>
+    <hr />
+    <p>@ViewBag.ExceptionMessage</p>
+</div>
+<div class="alert alert-danger">
+    <h5>堆栈信息：</h5>
+    <hr />
+    <p>@ViewBag.StackTrace</p>
+</div>

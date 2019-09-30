@@ -29,6 +29,7 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Details(int id)
         {
+            throw new Exception("此异常发生在Detail中");
             Student student = _studentRepository.GetStudent(id);
             if (student == null)
             {

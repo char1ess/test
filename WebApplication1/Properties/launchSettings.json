@@ -17,7 +17,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         //"ASPNETCORE_ENVIRONMENT": "Development"
-        "ASPNETCORE_ENVIRONMENT": "Staging"
+        //"ASPNETCORE_ENVIRONMENT": "Staging",
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
     "WebApplication1": {
