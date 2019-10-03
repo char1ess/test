@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebApplication1.Models;
 using WebApplication1.ViewModels;
 
@@ -14,11 +15,13 @@ namespace WebApplication1.Controllers
     {
         private readonly IStudentRepository _studentRepository;
         private readonly HostingEnvironment hostingEnvironment;
+        private readonly ILogger<HomeController> logger;
 
-        public HomeController(IStudentRepository studentRepository, HostingEnvironment hostingEnvironment)
+        public HomeController(IStudentRepository studentRepository, HostingEnvironment hostingEnvironment,ILogger<HomeController> logger)
         {
             _studentRepository = studentRepository;
             this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
         }
         public IActionResult Index()
         {
@@ -29,7 +32,12 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Details(int id)
         {
-            throw new Exception("此异常发生在Detail中");
+            logger.LogTrace("跟踪");
+            logger.LogDebug("调试");
+            logger.LogInformation("消息");
+            logger.LogWarning("警告");
+            logger.LogError("错误");
+            logger.LogCritical("严重");
             Student student = _studentRepository.GetStudent(id);
             if (student == null)
             {

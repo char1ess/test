@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ namespace WebApplication1.Models
     public class SQLStudentRepository : IStudentRepository
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<SQLStudentRepository> logger;
 
-        public SQLStudentRepository(AppDbContext context)
+        public SQLStudentRepository(AppDbContext context,ILogger<SQLStudentRepository>logger)
         {
             _context = context;
+            this.logger = logger;
         }
         public Student Add(Student student)
         {
@@ -33,6 +36,12 @@ namespace WebApplication1.Models
 
         public IEnumerable<Student> GetAllStudent()
         {
+            logger.LogTrace("跟踪");
+            logger.LogDebug("调试");
+            logger.LogInformation("消息");
+            logger.LogWarning("警告");
+            logger.LogError("错误");
+            logger.LogCritical("严重");
             return _context.Students;
         }
 
