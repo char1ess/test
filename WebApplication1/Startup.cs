@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("StudentDBConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
             services.AddMvc();
             services.AddScoped<IStudentRepository, SQLStudentRepository>();
         }
@@ -45,6 +47,7 @@ namespace WebApplication1
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");//保留源地址，错误码一直为404
             }
             app.UseStaticFiles();
+            app.UseAuthentication();//在使用MVC之前进行身份验证
             app.UseMvcWithDefaultRoute();
             //app.UseMvc(config=>config.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
             //var processname = Process.GetCurrentProcess().ProcessName;
