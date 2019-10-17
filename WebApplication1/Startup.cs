@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplication1.Middlewares;
 using WebApplication1.Models;
 
 namespace WebApplication1
@@ -27,7 +28,13 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("StudentDBConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
+            services.Configure<IdentityOptions>(option =>
+            {
+                option.Password.RequiredLength = 6;
+                option.Password.RequireNonAlphanumeric = false;//是否包括非字母的数字字符（默认为true）
+                option.Password.RequireUppercase = false;//是否包括大写字母
+            });//重新设置验证密码的配置
+            services.AddIdentity<IdentityUser, IdentityRole>().AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
             services.AddMvc();
             services.AddScoped<IStudentRepository, SQLStudentRepository>();
         }
