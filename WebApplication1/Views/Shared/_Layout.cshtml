@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager 
+@*注入SignInManager类*@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -27,9 +29,23 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="account" asp-action="register">注册</a>
-                    </li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <form asp-controller="account" asp-action="logout" method="post"> @*为了安全用post请求*@
+                                <button class="nav-link btn btn-link py-0" style="width:auto">注销 @User.Identity.Name</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="account" asp-action="register">注册</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="account" asp-action="register">登陆</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>

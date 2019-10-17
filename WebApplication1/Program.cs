@@ -24,12 +24,12 @@ namespace WebApplication1
             .ConfigureLogging(
                 (hostingContext, logging) =>//配置日志
                 {
-            logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-            logging.AddConsole();
-            logging.AddDebug();
-            logging.AddEventSourceLogger();
-            //使用nlog记录日志
-            logging.AddNLog();
-        });
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddEventSourceLogger();
+                    //使用nlog记录日志
+                    logging.AddNLog();
+                });
     }
 }

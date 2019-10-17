@@ -46,5 +46,11 @@ namespace WebApplication1.Controllers
             }
             return View(model);//验证错误保留填写内容
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("index","home");
+        }
     }
 }
