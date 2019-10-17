@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Models;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
@@ -45,6 +46,26 @@ namespace WebApplication1.Controllers
                 }
             }
             return View(model);//验证错误保留填写内容
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result =await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RemenberMe,false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("index","home");
+                }
+                ModelState.AddModelError(string.Empty, "登陆失败，请重试！");
+
+            }
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Logout()
