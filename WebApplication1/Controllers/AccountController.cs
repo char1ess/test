@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace WebApplication1.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
@@ -47,6 +49,7 @@ namespace WebApplication1.Controllers
             }
             return View(model);//验证错误保留填写内容
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
