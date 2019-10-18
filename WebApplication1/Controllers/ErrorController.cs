@@ -11,7 +11,7 @@ namespace WebApplication1.Controllers
 {
     public class ErrorController:Controller
     {
-        private ILogger<ErrorController> logger;
+        private readonly ILogger<ErrorController> logger;
         /// <summary>
         /// 依赖注入ilogger接口
         /// </summary>
