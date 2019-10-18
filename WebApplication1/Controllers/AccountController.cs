@@ -88,5 +88,18 @@ namespace WebApplication1.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+        [AcceptVerbs("Get","Post")]
+        public async Task<IActionResult> IsEmailInUse(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user==null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"邮箱：{email} 已经被使用了！");
+            }
+        }
     }
 }
