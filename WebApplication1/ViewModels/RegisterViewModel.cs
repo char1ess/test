@@ -24,5 +24,7 @@ namespace WebApplication1.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage ="两次密码不一致，请重新输入")]
         public string ConfirmPassword { get; set; }
+        [Display(Name = "城市")]
+        public string City { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace WebApplication1
                 option.Password.RequireNonAlphanumeric = false;//是否包括非字母的数字字符（默认为true）
                 option.Password.RequireUppercase = false;//是否包括大写字母
             });//重新设置验证密码的配置
-            services.AddIdentity<IdentityUser, IdentityRole>().AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
             services.AddMvc(config =>
             {//新增全局授权身份认证
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();

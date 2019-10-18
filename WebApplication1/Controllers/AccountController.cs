@@ -13,10 +13,10 @@ namespace WebApplication1.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)//注入UserManager和SingInManager服务
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)//注入UserManager和SingInManager服务
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -31,16 +31,17 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser//通过IdentityUser实例来存储传过来的表单内容
+                var user = new ApplicationUser//通过IdentityUser实例来存储传过来的表单内容
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    City = model.City
                 };
                 var result = await userManager.CreateAsync(user, model.Password);//通过userManager来异步创建用户
                 if (result.Succeeded)//成功
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);//创建用户，和是否记住登陆状态
-                    RedirectToAction("index", "home");
+                    return RedirectToAction("index", "home");
                 }
                 foreach (var error in result.Errors)//失败
                 {

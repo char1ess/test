@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class AppDbContext : IdentityDbContext//将DbContext更改为IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>//将DbContext更改为IdentityDbContext  //将IdentityDbContext更改为IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
