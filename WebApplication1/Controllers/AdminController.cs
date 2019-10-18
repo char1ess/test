@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Models;
 using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
@@ -11,10 +12,12 @@ namespace WebApplication1.Controllers
     public class AdminController:Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AdminController(RoleManager<IdentityRole> roleManager)
+        public AdminController(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager)
         {
             this.roleManager = roleManager;
+            this.userManager = userManager;
         }
         [HttpGet]
         public IActionResult CreateRole()
@@ -48,6 +51,56 @@ namespace WebApplication1.Controllers
         {
             var roles = roleManager.Roles;
             return View(roles);
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditRole(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            if (role==null)
+            {
+                ViewBag.ErrorMessage= $"角色ID为{id}的角色 不存在，请重试！";
+                return View("NotFount");
+            }
+            //存在此角色，将信息存到对应的EditRoleViewModel中
+            var model = new EditRoleViewModel
+            {
+                Id=role.Id,
+                RoleName=role.Name
+            };
+            //获取所有的用户信息
+            var users = userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                if (await userManager.IsInRoleAsync(user,role.Name))//用户是否包含这个角色名
+                {
+                    model.User.Add(user.UserName);//有的话添加到model中
+                }
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleViewModel model)
+        {
+            var role = await roleManager.FindByIdAsync(model.Id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"角色ID为{model.Id}的角色 不存在，请重试！";
+                return View("NotFount");
+            }
+            else
+            {
+                role.Name = model.RoleName;
+                var result =await roleManager.UpdateAsync(role);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("listroles");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty,error.Description);
+                }
+            }
+            return View(model);
         }
     }
 }
