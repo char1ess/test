@@ -102,5 +102,11 @@ namespace WebApplication1.Controllers
                 return Json($"邮箱：{email} 已经被使用了！");
             }
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult fangyu()
+        {
+            return View();
+        }
     }
 }
