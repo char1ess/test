@@ -10,7 +10,7 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -185,6 +185,55 @@ namespace WebApplication1.Controllers
         {
             var users = userManager.Users.ToList();
             return View(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"用户ID为{id}的角色不存在，请重试！";
+                return View("~/Views/Error/NotFound.cshtml");
+            }
+            var claims = await userManager.GetClaimsAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
+            EditUserViewModel model = new EditUserViewModel
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                City = user.City,
+                Claims = claims.Select(c => c.Value).ToList(),
+                Roles = roles
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"用户ID为{user.Id}的角色不存在，请重试！";
+                return View("~/Views/Error/NotFound.cshtml");
+            }
+            else
+            {
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.City = model.City;
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListUsers");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty,error.Description);
+                }
+                return View(model);
+            }
         }
     }
 }
