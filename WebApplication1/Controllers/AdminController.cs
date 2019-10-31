@@ -180,5 +180,11 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction("EditRole", new { id = roleId });
         }
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            var users = userManager.Users.ToList();
+            return View(users);
+        }
     }
 }

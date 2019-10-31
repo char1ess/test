@@ -40,6 +40,11 @@ namespace WebApplication1.Controllers
                 var result = await userManager.CreateAsync(user, model.Password);//通过userManager来异步创建用户
                 if (result.Succeeded)//成功
                 {
+                    //如果是从用户列表注册的话，注册成功则跳转回角色列表
+                    if (signInManager.IsSignedIn(User)&&User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers","Admin");
+                    }
                     await signInManager.SignInAsync(user, isPersistent: false);//创建用户，和是否记住登陆状态
                     return RedirectToAction("index", "home");
                 }

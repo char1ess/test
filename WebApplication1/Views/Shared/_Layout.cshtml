@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager 
+@inject SignInManager<ApplicationUser> SignInManager
 @*注入SignInManager类*@
 <html>
 <head>
@@ -9,6 +9,7 @@
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/jquery-validate/jquery.validate.js"></script>
     <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.15.0/esm/popper-utils.js"></script>
     <link href="~/lib/bootstrap-4.0.0/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/Css/site.css" rel="stylesheet" />
 </head>
@@ -29,18 +30,23 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Creat">添加学生</a>
                     </li>
-                    @if (SignInManager.IsSignedIn(User)&&User.IsInRole("Admin"))
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Admin" asp-action="ListRoles">角色管理</a>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdownMenuLink" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">管理</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ListRoles">角色列表</a>
+                                <a class="dropdown-item" asp-controller="Admin" asp-action="ListUsers">用户列表</a>
+                            </div>
                         </li>
                     }
-                    </ul>
+                </ul>
                 <ul class="navbar-nav ml-auto">
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li class="nav-item">
-                            <form asp-controller="account" asp-action="logout" method="post"> @*为了安全用post请求*@
+                            <form asp-controller="account" asp-action="logout" method="post">
+                                @*为了安全用post请求*@
                                 <button class="nav-link btn btn-link py-0" style="width:auto">注销 @User.Identity.Name</button>
                             </form>
                         </li>
