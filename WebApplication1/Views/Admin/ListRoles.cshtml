@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "角色列表";
 }
-    <h1>所有角色列表信息</h1>
+<h1>所有角色列表信息</h1>
 @if (Model.Any())
 {
     <a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateRole" asp-controller="Admin">添加角色</a>
@@ -12,8 +12,17 @@
             <div class="card-header">角色ID：@role.Id</div>
             <div class="card-body"><h5 class="card-title">角色名：@role.Name</h5></div>
             <div class="card-footer">
-                <a asp-action="editrole" asp-controller="admin" asp-route-id="@role.Id" class="btn btn-primary">编辑</a>
-                <a href="#" class="btn btn-danger">删除</a>
+                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                    <a asp-action="editrole" asp-controller="admin" asp-route-id="@role.Id" class="btn btn-primary">编辑</a>
+                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
+                        <span>确认是否删除？</span>
+                        <button type="submit" class="btn btn-danger">是</button>
+                        <a href="#" class="btn btn-primary" onclick="confirmDelete('@role.Id', false)">否</a>
+                    </span>
+                    <span id="deleteSpan_@role.Id">
+                        <a href="#" class="btn btn-danger" onclick="confirmDelete('@role.Id', true)">删除</a>
+                    </span>
+                </form>
             </div>
         </div>
     }
@@ -27,4 +36,7 @@ else
             <a asp-controller="admin" asp-action="createrole" class="btn btn-primary">创建角色</a>
         </div>
     </div>
+}
+@section Scripts{ 
+    <script src="~/Js/CustomScript.js"></script>
 }

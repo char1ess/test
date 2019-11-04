@@ -19,6 +19,10 @@ namespace WebApplication1.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);//使用基类的方法，防止报错
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e=>e.GetForeignKeys()))//取消AspNetUserRoles表外键级联，更改为不执行（限制操作）
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;//限制
+            }
             modelBuilder.Seed();
         }
     }

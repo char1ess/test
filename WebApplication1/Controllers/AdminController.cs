@@ -104,6 +104,29 @@ namespace WebApplication1.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"角色ID为{role.Id}的角色不存在，请重试！";
+                return View("~/Views/Error/NotFound.cshtml");
+            }
+            else
+            {
+                var result = await roleManager.DeleteAsync(role);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ListRoles");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("ListRoles");
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
@@ -212,7 +235,36 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            var user = await userManager.FindByIdAsync(model.Id);
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    ViewBag.ErrorMessage = $"用户ID为{user.Id}的角色不存在，请重试！";
+                    return View("~/Views/Error/NotFound.cshtml");
+                }
+                else
+                {
+                    user.UserName = model.UserName;
+                    user.Email = model.Email;
+                    user.City = model.City;
+                    var result = await userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ListUsers");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"用户ID为{user.Id}的角色不存在，请重试！";
@@ -220,19 +272,16 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                user.UserName = model.UserName;
-                user.Email = model.Email;
-                user.City = model.City;
-                var result = await userManager.UpdateAsync(user);
+                var result = await userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("ListUsers");
                 }
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty,error.Description);
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View(model);
+                return View("ListUsers");
             }
         }
     }

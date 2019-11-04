@@ -36,8 +36,8 @@ namespace WebApplication1
                 option.Password.RequireNonAlphanumeric = false;//是否包括非字母的数字字符（默认为true）
                 option.Password.RequireUppercase = false;//是否包括大写字母
             });//重新设置验证密码的配置
-            services.ConfigureApplicationCookie(option=>{ option.AccessDeniedPath = "/Account/fangyu"; });
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();//将身份认证两张表添加到EF框架中
+            services.ConfigureApplicationCookie(option=>{ option.AccessDeniedPath = "/Account/fangyu"; });//授权认证不正确跳转防御页面
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();//添加实体框架存储
             services.AddMvc(config =>
             {//新增全局授权身份认证
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
